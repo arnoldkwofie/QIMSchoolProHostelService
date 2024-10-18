@@ -1,0 +1,6 @@
+@QIMSchoolProHostelService_HostAddress = http://localhost:5166
+
+GET {{QIMSchoolProHostelService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
