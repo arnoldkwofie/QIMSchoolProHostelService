@@ -2,6 +2,7 @@
 using QIMSchoolPro.Hostel.Domain.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -17,6 +18,7 @@ namespace QIMSchoolPro.Hostel.Domain.Entities
         public FloorNumber FloorNumber { get; set; }
         public string? Description { get; set; }
 
+        //[NotMapped]
         public List<Room> Rooms { get; set; }
 
         public Floor()

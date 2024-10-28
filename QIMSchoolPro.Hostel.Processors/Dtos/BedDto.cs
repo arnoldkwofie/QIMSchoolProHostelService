@@ -14,6 +14,7 @@ namespace QIMSchoolPro.Hostel.Processors.Dtos
         public int BedNumber { get; set; }
         public BedType BedType { get; set; }
         public BedPosition BedPosition { get; set; }
+        public BedStatus BedStatus { get; set; }
         public string? Description { get; set; }
     }
 }

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace QIMSchoolPro.Hostel.Persistence.Interfaces
 {
-    public interface IBookingRepository: IRepository<Booking>
+    public interface IRoomFilterRepository: IRepository<RoomFilter>
     {
-        Task<Booking> GetUserBooking(string studentNumber);
+        Task<List<RoomFilter>> GetByRoomId(int roomId);
     }
 }

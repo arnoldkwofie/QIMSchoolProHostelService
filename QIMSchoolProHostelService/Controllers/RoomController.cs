@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QIMSchoolPro.Hostel.Application.Features.Building.Queries;
 using QIMSchoolPro.Hostel.Application.Features.Floor.Commands;
@@ -10,6 +11,7 @@ using static QIMSchoolPro.Hostel.Application.Features.Floor.Commands.CreateFloor
 
 namespace QIMSchoolProHostelService.Controllers
 {
+  
     public class RoomController : BaseController
     {
 
@@ -25,9 +27,9 @@ namespace QIMSchoolProHostelService.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<RoomViewModel>> GetsByBuildingId(int id)
+        public async Task<IEnumerable<RoomViewModel>> GetsByHostelId(int id)
         {
-            return await Mediator.Send(new GetRoomsByBuildingId.Query(id));
+            return await Mediator.Send(new GetRoomsByHostelId.Query(id));
         }
 
     }

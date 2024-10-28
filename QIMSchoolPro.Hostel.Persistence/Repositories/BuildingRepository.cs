@@ -16,14 +16,12 @@ namespace QIMSchoolPro.Hostel.Persistence.Repositories
             Logger = logger;
         }
 
-      
+
 
         public override IQueryable<Building> GetBaseQuery()
         {
             return base.GetBaseQuery()
-                .Include(a=>a.Floors).ThenInclude(a=>a.Rooms);
-
-
+                .Include(a => a.Floors).ThenInclude(a => a.Rooms);
         }
 
     }

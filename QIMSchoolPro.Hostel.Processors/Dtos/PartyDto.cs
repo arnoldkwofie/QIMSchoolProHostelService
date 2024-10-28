@@ -1,4 +1,5 @@
-﻿using QIMSchoolPro.Hostel.Domain.Enums;
+﻿using Qface.Domain.Shared.ValueObjects;
+using QIMSchoolPro.Hostel.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace QIMSchoolPro.Hostel.Processors.Dtos
         //public EmailAddressValueTypeDto PrimaryEmailAddress { get; set; }
         //public EmailAddressValueTypeDto OtherEmailAddress { get; set; }
 
-        //public PhoneNumberValueTypeDto PrimaryPhoneNumber { get; set; }
+        public PhoneNumberValueType PrimaryPhoneNumber { get; set; }
         //public PhoneNumberValueTypeDto OtherPhoneNumber { get; set; }
 
         //public AddressLineDto AddressLine { get; set; }

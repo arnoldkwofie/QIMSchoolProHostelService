@@ -26,7 +26,8 @@ namespace QIMSchoolPro.Hostel.Persistence.Repositories
 
         public override IQueryable<Bed> GetBaseQuery()
         {
-            return base.GetBaseQuery();
+            return base.GetBaseQuery()
+                .Include(a=>a.Room).ThenInclude(a=>a.Floor).ThenInclude(a=>a.Building);
                
 
 

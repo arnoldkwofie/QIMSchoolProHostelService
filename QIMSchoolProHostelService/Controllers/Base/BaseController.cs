@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Qface.Application.Shared.Common.Models;
 using Here;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QIMSchoolProHostelService.Controllers.Base
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public abstract class BaseController : ControllerBase

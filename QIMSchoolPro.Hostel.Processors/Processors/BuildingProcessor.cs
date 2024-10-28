@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using QIMSchoolPro.Hostel.Domain.Constants;
 using QIMSchoolPro.Hostel.Domain.Entities;
 using QIMSchoolPro.Hostel.Domain.Enums;
 using QIMSchoolPro.Hostel.Persistence;
 using QIMSchoolPro.Hostel.Persistence.Interfaces;
 using QIMSchoolPro.Hostel.Processors.Dtos;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,13 +23,13 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         private readonly IBuildingRepository _buildingRepository;
         private readonly IRoomTypeAmenityRepository _roomTypeAmenityRepository;
         private readonly IMapper _mapper;
-
-        public BuildingProcessor(IBuildingRepository buildingRepository, IRoomTypeAmenityRepository roomTypeAmenityRepository, IMapper mapper)
+        private readonly IDatabase _database;
+        public BuildingProcessor(IBuildingRepository buildingRepository, IRoomTypeAmenityRepository roomTypeAmenityRepository, IMapper mapper, IDatabase database)
         {
             _buildingRepository = buildingRepository;
             _roomTypeAmenityRepository = roomTypeAmenityRepository;
             _mapper = mapper;
-
+            _database = database;
         }
         public async Task Create(BuildingCommand command, CancellationToken cancellationToken)
         {
@@ -72,52 +74,50 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         //    }
         //}
 
-        public async Task<List<BuildingViewModel>> GetBuildingsByType(int type)
+        public async Task<List<BuildingViewModel>> GetHostels()
         {
             try
             {
 
-                //var key = RedisKeys.GetBuildings();
-
-                //var buildings = await GetBuildingsFormDFromCache(key);
-                
-
-                //if (processedforms.Count <= 0)
+                var key = RedisKeys.GetHostels();
+                var buildings = await GetHostelsFromCache(key);
 
 
-                    var allBuildings  = await _buildingRepository.GetAllAsync();
-                var sortedBuildings = allBuildings.Where(a => a.BuildingType == (BuildingType)type);
-                
-                var result = new List<BuildingViewModel>();
-
-                foreach(var building in sortedBuildings)
+                if (buildings.Count <= 0)
                 {
-                    var roomTypeId = building.Floors?.FirstOrDefault()?.Rooms?.FirstOrDefault()?.RoomTypeId ?? 0;
-                    List<string> amenities = new List<string>();
-                    if (roomTypeId > 0)
+                    var allBuildings = await _buildingRepository.GetAllAsync();
+                    var sortedBuildings = allBuildings.Where(a => a.BuildingType == BuildingType.Hostel);
+
+                    foreach (var building in allBuildings)
                     {
-                        var roomTypeAmenities= await _roomTypeAmenityRepository.GetAmenitiesByRoomType(roomTypeId);
-                        foreach(var amenity in roomTypeAmenities)
+                        var roomTypeId = building.Floors?.FirstOrDefault()?.Rooms?.FirstOrDefault()?.RoomTypeId ?? 0;
+                        List<string> amenities = new List<string>();
+                        if (roomTypeId > 0)
                         {
-                            amenities.Add(amenity.Amenity.Name);
+                            var roomTypeAmenities = await _roomTypeAmenityRepository.GetAmenitiesByRoomType(roomTypeId);
+                            foreach (var amenity in roomTypeAmenities)
+                            {
+                                amenities.Add(amenity.Amenity.Name);
+                            }
                         }
+
+                        buildings.Add(
+                            new BuildingViewModel
+                            {
+                                Address = building.Address,
+                                Id = building.Id,
+                                Name = building.Name,
+                                Picture = building.PicturePath,
+                                Amenities = amenities,
+                                Reviews = "4.5/5 (500 reviews)",
+                                PriceRange = "3000 - 5000"
+                            });
                     }
 
-                    result.Add(
-                        new BuildingViewModel
-                        {
-                            Address = building.Address,
-                            Id = building.Id,
-                            Name = building.Name,
-                            Picture=building.PicturePath,
-                            Amenities= amenities,
-                            Reviews= "4.5/5 (500 reviews)",
-                            PriceRange="3000 - 5000"
-                        });
+                    await AddBuildingsToRedis(key, buildings);
                 }
 
-
-                return result;
+                return buildings;
 
             }
             catch (Exception ex)
@@ -125,6 +125,45 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                 throw new Exception(ex.Message);
             }
         }
+
+
+        public async Task<List<BuildingViewModel>> GetHostelsFromCache(string key)
+        {
+            HashEntry[] buildingHash = await _database.HashGetAllAsync(key);
+
+            List<BuildingViewModel> buildings = new List<BuildingViewModel>();
+
+            foreach (var hashEntry in buildingHash)
+            {
+                string jsonValue = hashEntry.Value;
+
+                BuildingViewModel building = JsonConvert.DeserializeObject<BuildingViewModel>(jsonValue);
+
+                buildings.Add(building);
+            }
+
+            return buildings;
+        }
+
+        public async Task AddBuildingsToRedis(string key, List<BuildingViewModel> buildings)
+        {
+
+            foreach (var building in buildings)
+            {
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                };
+
+                var bookJson = JsonConvert.SerializeObject(building, settings);
+                await _database.HashSetAsync(key, building.Id.ToString(), bookJson);
+
+            }
+            await _database.KeyExpireAsync(key, TimeSpan.FromDays(30));
+        }
+
+
+
     }
 
 

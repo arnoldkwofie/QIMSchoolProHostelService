@@ -1,13 +1,28 @@
+using QIMSchoolPro.Hostel.Processors.Components.Messages;
+using QIMSchoolPro.Hostel.Processors.Components;
+using QIMSchoolPro.Hostel.Processors.Helpers;
 using QIMSchoolPro.Hostel.Processors.Middlewares;
 using QIMSchoolProHostelService;
+using Akka.Actor;
+using Akka.DI.Core;
+using QIMSchoolPro.Hostel.Processors.Components.Actors;
+using Autofac.Core;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.RegisterServices(builder.Configuration, builder.Environment);
 builder.Services.AddControllers();
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddLogging(logging =>
+{
+    logging.AddConsole();
+    logging.SetMinimumLevel(LogLevel.Debug);
+});
 
 var app = builder.Build();
 
@@ -36,13 +51,28 @@ app.Use(async (context, next) =>
 });
 
 app.UseCors("CorsPolicy");
+//app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization(); 
+
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<BookingHub>("/bookingHub");
+    
+});
+
+
+TopLevelActors.RoomUpdateSubscriberActor.Tell(new BackgroundMessage());
+
+
 app.Run();
+
+

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Qface.Application.Shared.Common.Interfaces;
+using QIMSchoolPro.Hostel.Persistence.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,19 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
     {
         private readonly IIdentityService _identityService;
         private readonly StudentProcessor _studentProcessor;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IBedRepository _bedRepository;
 
         public UserProcessor(
             IIdentityService identityService,
-            StudentProcessor studentProcessor
-
+            StudentProcessor studentProcessor,
+            IBookingRepository bookingRepository, IBedRepository bedRepository
             )
         {
             _identityService = identityService;
             _studentProcessor = studentProcessor;
+            _bookingRepository = bookingRepository;
+            _bedRepository = bedRepository;
 
         }
 
@@ -37,6 +42,19 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                 user.Name = student.Party.Name.FullNamev3;
                 user.StudentNumber = student.StudentNumber;
                 user.YearGroup = student.YearGroup.AdmittedYear;
+                user.PhoneNumber = student?.Party?.PrimaryPhoneNumber?.Phone?.Number;
+
+                var booking = await _bookingRepository.GetUserBooking(refNo);
+                if (booking!=null)
+                {
+                    user.IsBooked=true;
+                    if(booking.ConfirmationDate!=null) 
+                    {
+                        user.IsOwned=true;  
+                    }
+                }
+
+           
                
 
 
@@ -50,8 +68,10 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         public string StudentNumber { get; set; }
         public string Name { get; set; }
         public int YearGroup { get; set; }
-      
-       
-     
+        public bool IsBooked { get; set; }=false;
+        public bool IsOwned { get; set; }=false ;
+        public string? PhoneNumber { get; set; }
+
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QIMSchoolPro.Hostel.Persistence;
 
@@ -11,9 +12,11 @@ using QIMSchoolPro.Hostel.Persistence;
 namespace QIMSchoolPro.Hostel.Persistence.Migrations
 {
     [DbContext(typeof(HostelDbContext))]
-    partial class HostelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241024155513_RoomFilter")]
+    partial class RoomFilter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -571,9 +574,6 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
 
                     b.Property<string>("OtherProperty1")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Section")
                         .HasColumnType("int");

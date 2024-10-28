@@ -26,10 +26,12 @@ namespace QIMSchoolPro.Hostel.Persistence.Repositories
         public override IQueryable<Room> GetBaseQuery()
         {
             return base.GetBaseQuery()
-                .Include(a=>a.Floor)
+                .Include(a => a.Floor)
                 .ThenInclude(a => a.Building)
-                .Include(a=>a.RoomType)
-                .Include(a=>a.Beds);
+                .Include(a => a.RoomType)
+                .Include(a => a.Beds);
+                
+            
 
 
         }

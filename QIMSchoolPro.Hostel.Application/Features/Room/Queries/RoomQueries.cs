@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace QIMSchoolPro.Hostel.Application.Features.Building.Queries
 {
-    public static class GetRoomsByBuildingId
+    public static class GetRoomsByHostelId
     {
         public class Query : IRequest<IEnumerable<RoomViewModel>>
         {
@@ -31,7 +31,7 @@ namespace QIMSchoolPro.Hostel.Application.Features.Building.Queries
 
             public async Task<IEnumerable<RoomViewModel>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var result = await _roomProcessor.GetRoomsByBuildingId(request.Id);
+                var result = await _roomProcessor.GetRoomsByHostelId(request.Id);
                 return result;
             }
         }

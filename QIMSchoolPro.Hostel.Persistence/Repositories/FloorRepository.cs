@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using QIMSchoolPro.Hostel.Domain.Entities;
 using QIMSchoolPro.Hostel.Persistence.Interfaces;
 using QIMSchoolPro.Hostel.Persistence.Repositories.Base;
@@ -12,35 +11,19 @@ using System.Threading.Tasks;
 
 namespace QIMSchoolPro.Hostel.Persistence.Repositories
 {
-    public class StudentRepository : Repository<Student>, IStudentRepository
+    public class FloorRepository : Repository<Floor>, IFloorRepository
     {
-        public ILogger<Student> Logger { get; }
+        public ILogger<Floor> Logger { get; }
 
-        public StudentRepository(HostelDbContext context, ILogger<Student> logger) : base(context)
+        public FloorRepository(HostelDbContext context, ILogger<Floor> logger) : base(context)
         {
             Logger = logger;
         }
 
 
-        public async Task<Student> GetAsync(string id)
+        public override IQueryable<Floor> GetBaseQuery()
         {
-            try
-            {
-
-                var studentFromDB = await GetBaseQuery().FirstOrDefaultAsync(a => a.StudentNumber == id || a.IndexNumber == id);
-                return studentFromDB;
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
-        }
-
-        public override IQueryable<Student> GetBaseQuery()
-        {
-            return base.GetBaseQuery()
-                .Include(a=>a.Party);
+            return base.GetBaseQuery();
 
 
         }

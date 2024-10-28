@@ -36,15 +36,15 @@ namespace QIMSchoolPro.Hostel.Application.Features.Building.Queries
     //    }
     //}
 
-    public static class GetBuildingsByType
+    public static class GetHostels
     {
         public class Query : IRequest<IEnumerable<BuildingViewModel>>
         {
-            public Query(int type)
+            public Query()
             {
-                Type = type;
+                
             }
-            public int Type { get; set; }
+           
         }
 
         public class Handler : IRequestHandler<Query, IEnumerable<BuildingViewModel>>
@@ -58,7 +58,7 @@ namespace QIMSchoolPro.Hostel.Application.Features.Building.Queries
 
             public async Task<IEnumerable<BuildingViewModel>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var result = await _buildingProcessor.GetBuildingsByType(request.Type);
+                var result = await _buildingProcessor.GetHostels();
                 return result;
             }
         }
