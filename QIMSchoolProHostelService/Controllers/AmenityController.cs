@@ -23,8 +23,5 @@ namespace QIMSchoolProHostelService.Controllers
         }
 
 
-        
-
-
     }
 }

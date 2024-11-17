@@ -56,15 +56,15 @@ namespace Qface.Domain.Shared.Common
 	public abstract class AuditableEntity<T> : AuditableEntityBase
 	{
 		public T Id { get; set; }
-		public string OtherProperty { get; private set; }
-		public string OtherProperty1 { get; private set; }
+		public string? OtherProperty { get; private set; }
+		public string? OtherProperty1 { get; private set; }
 
 	}
 	public abstract class AuditableAutoEntity : AuditableEntityBase
 	{
 		public int Id { get; set; }
-		public string OtherProperty { get; private set; } = "Normal";
-		public string OtherProperty1 { get; private set; } = "Normal";
+		public string? OtherProperty { get; private set; } = "Normal";
+		public string? OtherProperty1 { get; private set; } = "Normal";
 
 
         //public byte[] RowVersion { get; set; }

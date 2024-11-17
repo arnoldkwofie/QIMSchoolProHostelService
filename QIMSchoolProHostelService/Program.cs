@@ -8,8 +8,19 @@ using Akka.DI.Core;
 using QIMSchoolPro.Hostel.Processors.Components.Actors;
 using Autofac.Core;
 using StackExchange.Redis;
+using Serilog;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day) // Log to a file
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 
 builder.Services.RegisterServices(builder.Configuration, builder.Environment);
 builder.Services.AddControllers();
@@ -20,9 +31,15 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddLogging(logging =>
 {
+    logging.AddSerilog();
     logging.AddConsole();
+   
     logging.SetMinimumLevel(LogLevel.Debug);
 });
+
+
+
+
 
 var app = builder.Build();
 
@@ -53,7 +70,9 @@ app.Use(async (context, next) =>
 app.UseCors("CorsPolicy");
 //app.UseCors("AllowAllOrigins");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+//app.Urls.Add("https://+:443");
 
 app.MapControllers();
 

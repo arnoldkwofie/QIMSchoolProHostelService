@@ -8,8 +8,8 @@ namespace QIMSchoolPro.Hostel.Domain.Enums
 {
     public enum GenderOption
     {
-        Mixed=1,
+        Female=1,
         Male,
-        Female
+        Mixed
     }
 }

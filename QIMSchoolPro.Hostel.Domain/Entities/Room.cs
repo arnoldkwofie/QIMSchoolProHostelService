@@ -1,4 +1,5 @@
 ﻿using Qface.Domain.Shared.Common;
+using QIMSchoolPro.Hostel.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace QIMSchoolPro.Hostel.Domain.Entities
         public int RoomNumber { get; set; }
         public int RoomTypeId { get; set; }
         public RoomType RoomType { get; set; }
+        public GenderOption GenderOption { get; set; }
         public int Capacity { get; set; }
         public string? Description { get; set; }
         public int BookedBeds { get; set; }

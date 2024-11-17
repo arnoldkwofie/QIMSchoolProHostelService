@@ -7,6 +7,7 @@ using QIMSchoolPro.Hostel.Application.Features.RoomType.Commands;
 using QIMSchoolPro.Hostel.Processors.Dtos;
 using QIMSchoolPro.Hostel.Processors.Processors;
 using QIMSchoolProHostelService.Controllers.Base;
+using Serilog;
 
 namespace QIMSchoolProHostelService.Controllers
 {
@@ -42,6 +43,24 @@ namespace QIMSchoolProHostelService.Controllers
         }
 
 
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<int> Test()
+        {
+            try
+            {
+                // Here you can implement any logic, for example, fetching data from a service
+                int result = 34; // Example result
+                return Ok(result); // This will return a 200 OK with the integer
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred in Test action");
+                return StatusCode(500, "Internal server error"); // Return 500 status on error
+            }
+        }
 
     }
 }

@@ -218,11 +218,7 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                             
                             //var subscriber = _redis.GetSubscriber();
                             //await subscriber.PublishAsync("bed_bookings", JsonConvert.SerializeObject(bookingInfo));
-                            
                         }
-
-                            
-
 
                         _logger.LogInformation("success: {@ResponseData}", response);
                         return response;

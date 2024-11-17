@@ -49,6 +49,7 @@ namespace QIMSchoolPro.Hostel.Persistence
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IAcademicConfigurationRepository, AcademicConfigurationRepository>();
             services.AddScoped<IRoomFilterRepository, RoomFIlterRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 

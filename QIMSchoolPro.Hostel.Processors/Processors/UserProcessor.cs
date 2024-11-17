@@ -43,6 +43,7 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                 user.StudentNumber = student.StudentNumber;
                 user.YearGroup = student.YearGroup.AdmittedYear;
                 user.PhoneNumber = student?.Party?.PrimaryPhoneNumber?.Phone?.Number;
+                user.HostelId = student?.HallId;
 
                 var booking = await _bookingRepository.GetUserBooking(refNo);
                 if (booking!=null)
@@ -53,9 +54,6 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                         user.IsOwned=true;  
                     }
                 }
-
-           
-               
 
 
             return user;
@@ -71,6 +69,7 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         public bool IsBooked { get; set; }=false;
         public bool IsOwned { get; set; }=false ;
         public string? PhoneNumber { get; set; }
+        public int? HostelId { get; set; }   
 
 
     }

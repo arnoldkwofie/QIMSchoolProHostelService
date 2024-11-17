@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
+using Qface.Application.Shared.Common.Interfaces;
 using QIMSchoolPro.Hostel.Domain.Constants;
 using QIMSchoolPro.Hostel.Domain.Entities;
 using QIMSchoolPro.Hostel.Domain.Enums;
@@ -28,14 +29,16 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         private readonly IDatabase _database;
         private readonly IRoomFilterRepository _roomFilterRepository;
         private readonly IStudentRepository _studentRepository;
+        private readonly IIdentityService _identityService;
         public RoomProcessor(IRoomRepository roomRepository, IMapper mapper, IDatabase database,
-            IRoomFilterRepository roomFilterRepository, IStudentRepository studentRepository)
+            IRoomFilterRepository roomFilterRepository, IStudentRepository studentRepository, IIdentityService identityService)
         {
             _roomRepository = roomRepository;
             _mapper = mapper;
             _database = database;
             _roomFilterRepository = roomFilterRepository;
             _studentRepository = studentRepository;
+            _identityService = identityService;
         }
         public async Task Create(RoomCommand command, CancellationToken cancellationToken)
         {
@@ -62,8 +65,8 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         {
             try
             {
-                //var username = _identityService.GetUserName();
-                var username = "9013392023";
+                var username = _identityService.GetUserName();
+                var student = await _studentRepository.GetAsync(username);
 
                 var key = RedisKeys.GetRooms();
                 var rooms = await GetRoomsFromCache(key);
@@ -89,13 +92,15 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
                             SlotLeft = item.Capacity - item.BookedBeds < 0 ? 0 : item.Capacity - item.BookedBeds,
                             Beds = item.Beds,
                             HostelId=item?.Floor?.Building?.Id,
+                            GenderOption=item.GenderOption
+
                         }
                         );
                     }
                     await AddRoomsToRedis(key, rooms);
                 }
 
-                var sorted = rooms.Where(a => a.HostelId == id && a.SlotLeft >0).OrderBy(a=>a.Id).ToList();
+                var sorted = rooms.Where(a => a.HostelId == id && a.SlotLeft >0 && a.GenderOption== (GenderOption)student.Party.Name.Sex).OrderBy(a=>a.Id).ToList();
                 var advanceFilter = await FilterRoom(sorted, username);
 
                 return advanceFilter;
@@ -228,6 +233,7 @@ namespace QIMSchoolPro.Hostel.Processors.Processors
         public int? HostelId { get; set; }
         public string? RoomNumber { get; set; }
         public string? RoomType { get; set; }
+        public GenderOption GenderOption { get; set; }
         public string? Hostel { get; set; }
         public decimal? Price { get; set; }
         public int Capacity { get; set; }

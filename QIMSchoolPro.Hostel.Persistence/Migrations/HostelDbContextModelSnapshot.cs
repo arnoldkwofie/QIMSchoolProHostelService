@@ -34,11 +34,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -150,6 +148,8 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BedId");
+
                     b.ToTable("Booking", (string)null);
                 });
 
@@ -216,11 +216,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -251,11 +249,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TranscriptCode")
@@ -292,11 +288,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -336,11 +330,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SchoolCentreId")
@@ -405,11 +397,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -441,11 +431,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PartyType")
@@ -457,6 +445,117 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Party", (string)null);
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProperty")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProperty1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PartyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentVendorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceiptNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.HasIndex("PaymentVendorId");
+
+                    b.ToTable("Payment", (string)null);
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.PaymentItemLine", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OtherProperty")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProperty1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("PaymentItemLine", (string)null);
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.PaymentVendor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProperty")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherProperty1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServerIPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PaymentVendor", (string)null);
                 });
 
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Programme", b =>
@@ -495,11 +594,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProgrammeCourseRegistrationType")
@@ -532,6 +629,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FloorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenderOption")
                         .HasColumnType("int");
 
                     b.Property<string>("OtherProperty")
@@ -664,11 +764,9 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherProperty1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -888,7 +986,7 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
 
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Bed", b =>
                 {
-                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Room", null)
+                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Room", "Room")
                         .WithMany("Beds")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -940,10 +1038,18 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
 
                     b.Navigation("Audit")
                         .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Booking", b =>
                 {
+                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Bed", "Bed")
+                        .WithMany()
+                        .HasForeignKey("BedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("QIMSchoolPro.Hostel.Domain.ValueObjects.AcademicPeriod", "AcademicPeriod", b1 =>
                         {
                             b1.Property<int>("BookingId")
@@ -1014,6 +1120,8 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
 
                     b.Navigation("Audit")
                         .IsRequired();
+
+                    b.Navigation("Bed");
                 });
 
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Building", b =>
@@ -1711,6 +1819,339 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId");
+
+                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.PaymentVendor", "PaymentVendor")
+                        .WithMany()
+                        .HasForeignKey("PaymentVendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("QIMSchoolPro.Hostel.Domain.ValueObjects.AcademicPeriod", "AcademicPeriod", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("LowerYear")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Semester")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("UpperYear")
+                                .HasColumnType("int");
+
+                            b1.HasKey("PaymentId");
+
+                            b1.ToTable("Payment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentId");
+                        });
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.Audit", "Audit", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("CreatedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatus")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatusCreateBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("EntityStatusCreated")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("EntityStatusLastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("EntityStatusLastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("LastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentId");
+
+                            b1.ToTable("Payment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentId");
+                        });
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.Payee", "Payee", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentId");
+
+                            b1.ToTable("Payment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentId");
+                        });
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.PaymentVendorDetail", "PaymentVendorDetail", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("BankTransactionId")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Branch")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("TallerName")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("TallerNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentId");
+
+                            b1.ToTable("Payment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentId");
+                        });
+
+                    b.Navigation("AcademicPeriod")
+                        .IsRequired();
+
+                    b.Navigation("Audit")
+                        .IsRequired();
+
+                    b.Navigation("Party");
+
+                    b.Navigation("Payee")
+                        .IsRequired();
+
+                    b.Navigation("PaymentVendor");
+
+                    b.Navigation("PaymentVendorDetail")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.PaymentItemLine", b =>
+                {
+                    b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Payment", "Payment")
+                        .WithMany("PaymentItemLines")
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.Audit", "Audit", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentItemLineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("CreatedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatus")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatusCreateBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("EntityStatusCreated")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("EntityStatusLastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("EntityStatusLastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("LastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentItemLineId");
+
+                            b1.ToTable("PaymentItemLine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentItemLineId");
+                        });
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.Money", "Amount", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentItemLineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("ForeignCurrency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<decimal?>("ForeignValue")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<string>("LocalCurrency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<decimal?>("LocalValue")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<decimal?>("Value")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.HasKey("PaymentItemLineId");
+
+                            b1.ToTable("PaymentItemLine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentItemLineId");
+
+                            b1.OwnsOne("Qface.Domain.Shared.ValueObjects.Rate", "Rate", b2 =>
+                                {
+                                    b2.Property<Guid>("MoneyPaymentItemLineId")
+                                        .HasColumnType("uniqueidentifier");
+
+                                    b2.Property<decimal>("Buying")
+                                        .HasColumnType("decimal(18,2)");
+
+                                    b2.Property<decimal>("Selling")
+                                        .HasColumnType("decimal(18,2)");
+
+                                    b2.HasKey("MoneyPaymentItemLineId");
+
+                                    b2.ToTable("PaymentItemLine");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("MoneyPaymentItemLineId");
+                                });
+
+                            b1.Navigation("Rate")
+                                .IsRequired();
+                        });
+
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.PaymentToken", "Token", b1 =>
+                        {
+                            b1.Property<Guid>("PaymentItemLineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("Date")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<Guid?>("Id")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("PinCode")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ReferenceNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentItemLineId");
+
+                            b1.ToTable("PaymentItemLine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentItemLineId");
+                        });
+
+                    b.Navigation("Amount")
+                        .IsRequired();
+
+                    b.Navigation("Audit")
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Token")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.PaymentVendor", b =>
+                {
+                    b.OwnsOne("Qface.Domain.Shared.ValueObjects.Audit", "Audit", b1 =>
+                        {
+                            b1.Property<int>("PaymentVendorId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("Created")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("CreatedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatus")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EntityStatusCreateBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("EntityStatusCreated")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("EntityStatusLastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("EntityStatusLastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<DateTime?>("LastModified")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("LastModifiedBy")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("PaymentVendorId");
+
+                            b1.ToTable("PaymentVendor");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PaymentVendorId");
+                        });
+
+                    b.Navigation("Audit")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Programme", b =>
                 {
                     b.HasOne("QIMSchoolPro.Hostel.Domain.Entities.Certificate", "Certificate")
@@ -2192,6 +2633,11 @@ namespace QIMSchoolPro.Hostel.Persistence.Migrations
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Floor", b =>
                 {
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Payment", b =>
+                {
+                    b.Navigation("PaymentItemLines");
                 });
 
             modelBuilder.Entity("QIMSchoolPro.Hostel.Domain.Entities.Room", b =>

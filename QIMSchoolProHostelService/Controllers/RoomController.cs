@@ -14,7 +14,7 @@ namespace QIMSchoolProHostelService.Controllers
   
     public class RoomController : BaseController
     {
-
+       
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]

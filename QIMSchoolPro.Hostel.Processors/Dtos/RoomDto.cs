@@ -1,4 +1,5 @@
 ﻿using QIMSchoolPro.Hostel.Domain.Entities;
+using QIMSchoolPro.Hostel.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace QIMSchoolPro.Hostel.Processors.Dtos
         public FloorDto? Floor { get; set; }
         public int RoomNumber { get; set; }
         public int RoomTypeId { get; set; }
+        public GenderOption GenderOption { get; set; }
         public RoomType? RoomType { get; set; }
         public int Capacity { get; set; }
         public string? Description { get; set; }

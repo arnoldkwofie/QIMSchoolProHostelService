@@ -27,6 +27,9 @@ namespace QIMSchoolPro.Hostel.Processors.Mappings
             CreateMap<Student, StudentDto>().ReverseMap();
             CreateMap<Name, NameDto>().ReverseMap();
             CreateMap<Programme, ProgrammeDto>().ReverseMap();
+                 CreateMap<Payment, PaymentDto>().ReverseMap();
+                 CreateMap<PaymentVendor, PaymentVendorDto>().ReverseMap();
+                 CreateMap<PaymentItemLine, PaymentItemLineDto>().ReverseMap();
 
 
 

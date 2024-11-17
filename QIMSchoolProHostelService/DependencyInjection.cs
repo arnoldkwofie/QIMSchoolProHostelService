@@ -45,10 +45,9 @@ namespace QIMSchoolProHostelService
 
             services.AddSignalR();
 
+            string redisUrl = configuration["RedisUrl"];
             services.AddScoped(cfg =>
             {
-                string redisUrl = configuration["RedisUrl"];
-
                 ConfigurationOptions options = ConfigurationOptions.Parse(redisUrl);
                 options.AbortOnConnectFail = false; // or options.SetAbortOnConnectFail(false);
 
@@ -56,13 +55,14 @@ namespace QIMSchoolProHostelService
                 return multiplexer.GetDatabase();
             });
 
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost"));
+            //services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost"));
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisUrl));
 
             AddActorSystem(services);
 
-            
-
         }
+
+    
         private static IServiceCollection InstallDefaults(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
@@ -76,21 +76,21 @@ namespace QIMSchoolProHostelService
 
         private static IServiceCollection InstallCors(this IServiceCollection services)
         {
-            //         services.AddCors(options =>
-            //         {
-            //             options.AddDefaultPolicy(opts =>
-            //             {
-            //                 opts.AllowAnyOrigin()
-            //                 .AllowAnyMethod()
-            //                 .AllowAnyHeader();
-            //             });
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(opts =>
+            //    {
+            //        opts.AllowAnyOrigin()
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader();
+            //    });
 
-            //	//options.AddDefaultPolicy(opts =>
-            //	//{
-            //	//    opts.WithOrigins("http://localhost:3000")
-            //	//        .AllowAnyMethod()
-            //	//        .AllowAnyHeader();
-            //	//});
+            //    options.AddDefaultPolicy(opts =>
+            //    {
+            //        opts.WithOrigins("http://localhost:3000")
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader();
+            //    });
 
 
             //});
@@ -151,7 +151,6 @@ namespace QIMSchoolProHostelService
             });
             return services;
         }
-
 
 
         public static IServiceCollection AddActorSystem(IServiceCollection services)
